@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Creative To-Do List App</title>
+    <style>
+        * { box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    header {
+        text-align: center;
+        padding: 2rem 1rem 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        width: 100%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; text-shadow: 1px 1px 5px rgba(0,0,0,0.4); }
+    header p { margin-top: 0.3rem; font-style: italic; color: #d2d2ff; }
+
+    input[name="csrfmiddlewaretoken"] {
+    display: none !important;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    clip: rect(0,0,0,0);
+    position: absolute;
+    overflow: hidden;
+}
+
+
+    main { padding: 2rem 1rem; max-width: 960px; width: 100%; flex-grow: 1; }
+
+    .form-section {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 20px rgba(255,255,255,0.1);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem 1.5rem;
+        align-items: end;
+    }
+    .form-grid label { display: block; margin-bottom: 0.3rem; font-weight: 600; }
+    .required { color: #ff6b6b; }
+
+    input, textarea {
+        width: 100%;
+        padding: 0.5rem 0.6rem;
+        border-radius: 6px;
+        border: none;
+        font-size: 1rem;
+        transition: box-shadow 0.3s ease;
+    }
+
+    input:focus, textarea:focus { outline: none; box-shadow: 0 0 6px 2px #ff6b6b; background: #fff; color: #333; }
+
+    .desc-field { grid-column: 1 / -1; position: relative; }
+    .char-count { font-size: 0.8rem; color: #f3f3f3cc; position: absolute; bottom: 6px; right: 10px; }
+
+    .form-actions { margin-top: 1rem; display: flex; gap: 1rem; }
+
+    button {
+        background: #ff6b6b; border: none; color: #fff; font-weight: 700;
+        padding: 0.8rem 1.4rem; border-radius: 8px; cursor: pointer; font-size: 1.1rem;
+        transition: background 0.25s ease; box-shadow: 0 4px 10px #ff6b6baa;
+    }
+    button:hover { background: #ff3b3b; box-shadow: 0 6px 14px #ff3b3bcc; }
+    button.hidden { display: none; }
+
+    .table-section { overflow-x: auto; }
+
+    #taskTable {
+        width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px; box-shadow: 0 8px 20px rgba(255, 107, 107, 0.2);
+    }
+    #taskTable thead { background: #ff6b6b; color: #fff; font-weight: 700; }
+    #taskTable th, #taskTable td { padding: 0.85rem 1rem; text-align: left; vertical-align: middle; }
+    #taskTable tbody tr { border-bottom: 1px solid #ff6b6b66; transition: background 0.25s ease; }
+    #taskTable tbody tr:hover { background: #ff6b6b33; }
+
+    .action-btn { background: transparent; border: none; cursor: pointer; font-weight: 600; color: #fff; margin-right: 0.6rem; padding: 0.3rem 0.6rem; border-radius: 5px; transition: background 0.2s ease; }
+    .action-btn.edit { background: #ffd93b; color: #222; }
+    .action-btn.edit:hover { background: #ffea5a; }
+    .action-btn.delete { background: #ff3b3b; }
+    .action-btn.delete:hover { background: #d10f0f; }
+
+    .no-tasks-message { margin-top: 1rem; font-style: italic; color: #ffc0c0; text-align: center; }
+    .small-muted { font-size: 0.85rem; color: #ffe8e8; opacity: 0.9; }
+
+    @media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr; /* Stack inputs vertically on narrow screens */
+  }
+  button {
+    width: 100%;
+  }
+  #taskTable th, #taskTable td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Creative To-Do List</h1>
+        <p>Manage your projects with flair and ease</p>
+    </header>
+    <main>
+        <section class="form-section">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-grid">
+                    {{ form.customer.label_tag }}{{ form.customer }}
+                    {{ form.project.label_tag }}{{ form.project }}
+                    {{ form.due_date.label_tag }}{{ form.due_date }}
+                    {{ form.owner.label_tag }}{{ form.owner }}
+                    <div class="desc-field">
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Add Task</button>
+                </div>
+            </form>
+        </section>
+        <section class="table-section">
+            <table id="taskTable">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Project</th>
+                        <th>Due Date</th>
+                        <th>Owner</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if tasks %}
+                        {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.customer }}</td>
+                            <td>{{ task.project }}</td>
+                            <td>{{ task.due_date|date:"M d, Y" }}</td>
+                            <td>{{ task.owner|default:"-" }}</td>
+                            <td>{{ task.description }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="5" class="no-tasks-message">No tasks added yet!</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
