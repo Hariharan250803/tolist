@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>To-do list</title>
+        <style>
+            body{
+                margin: 0;
+                background-color: whitesmoke;
+                font-family: 'arial';
+            }
+            .page-wrapper{
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .logo-wrapper {
+                text-align: center;
+                margin-bottom: 16px;
+            }
+            .logo {
+                height: 40px;     
+            }
+            .sign-in{
+                background-color: white;
+                padding: 32px;
+                max-width: 420px;
+                width: 100%;
+                border-radius: 12px;
+                box-shadow: 0 20px 40px rgba(15,23,42,0.12);
+            }
+            h1{
+                text-align: center;
+                margin: 16px 0 6px 0;
+                font-size: 24px;
+                font-weight: 600;
+                font-family: arial;
+            }
+            p{
+                text-align: center;
+                margin: 0 0 28px 0;
+                color: #6b7280;
+                font-size: 14px;
+            }
+            .field-group{
+            margin-bottom: 18px;
+            }
+            .field-group h4{
+                margin: 0 0 6px 0;
+                font-size: 14px;
+                font-family: arial;
+            }
+            .email-text-box,
+            .pass-text-box{
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                font-size: 14px;
+                box-sizing: border-box;
+                background-color: #f9fafb;
+            }
+            .email-text-box::placeholder,
+            .pass-text-box::placeholder {
+                color: black;
+                opacity: 1;
+            }
+            .email-text-box:focus,
+            .pass-text-box:focus{
+                outline: none;
+                border-color: #2563eb;
+                background-color: #ffffff;
+                box-shadow: 0 0 0 1px #2563eb33;
+            }
+            .ai-sign-in{
+                margin-top: 20px;
+            }
+            .ai-sign-in-button{
+                width: 100%;
+                background-color: #2563eb;
+                padding: 10px 0;
+                color: white;
+                border-radius: 9px;
+                font-size: 15px;
+                cursor: pointer;
+                border: none;
+                font-weight: 500;
+            }
+            .footer-text{
+                margin-top: 14px;
+                text-align: center;
+                font-size: 13px;
+                color: #6b7280;
+            }
+
+            .footer-text a{
+                color: #2563eb;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .footer-text a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page-wrapper">
+        <section class="sign-in">
+            <div class="logo-wrapper">
+                <img src="/static/images/logo.jpeg" class="logo">
+            </div>
+
+            <h1>welcome Back</h1>
+            <p>Sign in to your BeThoven account</p>
+
+            <form method="post" novalidate>
+            <div class="field-group">
+                <h4>Email</h4>
+                <input type="email" class="email-text-box" placeholder="you@example.com">
+            </div>
+
+            <div class="field-group">
+                <h4>Password</h4>
+                <input type="password" class="pass-text-box" placeholder="Enter your Password">
+            </div>
+
+            <div class="ai-sign-in">
+                <button class="ai-sign-in-button">Sign in</button>
+            </div>
+</form>
+
+            <div class="footer-text">
+                Don’t have an account?
+                <a href="{% url 'signup' %}">Sign up</a>
+            </div>
+
+        </section>
+        </div>
+    </body>
+</html>
